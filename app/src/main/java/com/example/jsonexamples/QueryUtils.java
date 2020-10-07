@@ -46,7 +46,8 @@ public final class QueryUtils {
             Double mag=main.getDouble("mag");
             String loc=main.getString("place");
             long time=main.getLong("time");
-            earthquakes.add(new Earthquack(mag,loc,time));
+            String URL=main.getString("url");
+            earthquakes.add(new Earthquack(mag,loc,time,URL));
         }
           return earthquakes;
     }

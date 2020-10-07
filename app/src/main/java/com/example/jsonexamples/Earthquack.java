@@ -4,11 +4,27 @@ public class Earthquack {
     Double magnitude;
     String location;
     long date;
+    String URL;
+
+    public Earthquack(Double magnitude, String location, long date, String URL) {
+        this.magnitude = magnitude;
+        this.location = location;
+        this.date = date;
+        this.URL = URL;
+    }
 
     public Earthquack(Double magnitude, String location, long date) {
         this.magnitude = magnitude;
         this.location = location;
         this.date = date;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 
     public Double getMagnitude() {
