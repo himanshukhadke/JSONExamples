@@ -1,53 +1,74 @@
 package com.example.jsonexamples;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
-import android.content.Intent;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
-
-import org.json.JSONException;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String USGS_REQUEST_URL =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=2";
+public class MainActivity extends FragmentActivity implements LoaderManager.LoaderCallbacks<List<Earthquack>> {
+
     private EarthquackAdapter mAdapter;
+    private ListView listView;
+    private TextView empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EarthquakeAsyncTask task = new EarthquakeAsyncTask();
-        task.execute(USGS_REQUEST_URL);
         mAdapter = new EarthquackAdapter(this, new ArrayList<Earthquack>());
-        ListView listView = findViewById(R.id.list_view);
+        listView = findViewById(R.id.list_view);
+        empty = findViewById(R.id.empty);
+        listView.setEmptyView(empty);
+        checkConnection();
         listView.setAdapter(mAdapter);
+        getSupportLoaderManager().initLoader(0, null, this).forceLoad();
     }
 
-    private class EarthquakeAsyncTask extends AsyncTask<String, Void, List<Earthquack>> {
+    private void checkConnection() {
+        ConnectivityManager cm =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        @Override
-        protected List<Earthquack> doInBackground(String... urls) {
-            if (urls.length < 1 || urls[0] == null) {
-                return null;
-            }
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+        if (!isConnected) {
+            empty.setText("No Internet Connection");
+            Log.i("checkConnection()", "NO internet Connection");
+        } else
+            empty.setText("Loading...");
+    }
 
-            List<Earthquack> result = QueryUtils.fetchEarthquakeData(urls[0]);
-            return result;
+    @NonNull
+    @Override
+    public Loader<List<Earthquack>> onCreateLoader(int id, @Nullable Bundle args) {
+        return new EarthquakeLoader(MainActivity.this);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<List<Earthquack>> loader, List<Earthquack> data) {
+        mAdapter.clear();
+        if (data != null) {
+            mAdapter.addAll(data);
         }
+    }
 
-        @Override
-        protected void onPostExecute(List<Earthquack> data) {
-            // Clear the adapter of previous earthquake data
-            mAdapter.clear();
-            if (data != null && !data.isEmpty()) {
-                mAdapter.addAll(data);
-            }
-        }
+    @Override
+    public void onLoaderReset(@NonNull Loader<List<Earthquack>> loader) {
+        mAdapter.clear();
     }
 }

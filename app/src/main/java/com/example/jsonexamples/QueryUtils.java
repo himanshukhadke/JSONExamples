@@ -1,5 +1,8 @@
 package com.example.jsonexamples;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -93,7 +96,6 @@ public final class QueryUtils {
             inputStream = urlConnection.getInputStream();
             finalString = readFromStream(inputStream);
         } catch (IOException e) {
-            System.out.println("Exception in makeHTTpRequest");
             e.printStackTrace();
         }
         return finalString;
