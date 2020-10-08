@@ -1,23 +1,18 @@
 package com.example.jsonexamples;
 
 public class Earthquack {
-    Double magnitude;
+    double magnitude;
     String location;
     long date;
     String URL;
 
-    public Earthquack(Double magnitude, String location, long date, String URL) {
+    public Earthquack(double magnitude, String location, long date, String URL) {
         this.magnitude = magnitude;
         this.location = location;
         this.date = date;
         this.URL = URL;
     }
 
-    public Earthquack(Double magnitude, String location, long date) {
-        this.magnitude = magnitude;
-        this.location = location;
-        this.date = date;
-    }
 
     public String getURL() {
         return URL;
@@ -27,11 +22,11 @@ public class Earthquack {
         this.URL = URL;
     }
 
-    public Double getMagnitude() {
+    public double getMagnitude() {
         return magnitude;
     }
 
-    public void setMagnitude(Double magnitude) {
+    public void setMagnitude(double magnitude) {
         this.magnitude = magnitude;
     }
 

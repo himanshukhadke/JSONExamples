@@ -23,6 +23,7 @@ import java.util.List;
 import static androidx.core.content.ContextCompat.startActivity;
 
 public class EarthquackAdapter extends ArrayAdapter<Earthquack> {
+
     private Context c;
 
     public EarthquackAdapter(@NonNull Context context, @NonNull List<Earthquack> objects) {
