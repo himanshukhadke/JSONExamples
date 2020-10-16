@@ -10,17 +10,17 @@ import androidx.loader.content.AsyncTaskLoader;
 import java.util.List;
 
 public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquack>> {
-    private static final String USGS_REQUEST_URL =
-            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=3";
+    private static String query;
 
-    public EarthquakeLoader(@NonNull Context context) {
+    public EarthquakeLoader(@NonNull Context context, String Query) {
         super(context);
+        query = Query;
     }
 
     @Nullable
     @Override
     public List<Earthquack> loadInBackground() {
         Log.i("EarquackLoader", " LoadInBacckground Has started");
-        return QueryUtils.fetchEarthquakeData(USGS_REQUEST_URL);
+        return QueryUtils.fetchEarthquakeData(query);
     }
 }
